@@ -5,7 +5,7 @@ import { TextInput, View , TextInputProps} from "react-native";
 
 function Input({children } : {children: ReactNode}){ // Tipagem 
     return(
-        <View className="w-full h-14 flex-row items-center gap-3 p-3 border border-green-500 rounded-lg">
+        <View className="w-full h-14 flex-row items-center gap-3 p-3 border border-green-400 rounded-lg">
             {children}
         </View>
     )
@@ -14,7 +14,7 @@ function Input({children } : {children: ReactNode}){ // Tipagem
 function Field({...rest}:TextInputProps){
     return(
         <TextInput 
-        className="flex-1 text-white text-base font-regular" 
+        className="flex-1 text-gray-50 text-base font-regular" 
         placeholderTextColor={colors.gray[200]}
         {...rest}
         />

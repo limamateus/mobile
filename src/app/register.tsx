@@ -33,7 +33,7 @@ export default function Home() {
                     title='Acessar credencial'
                     isLoading={false}
                 />
-                <Link href="/" className=' text-gray-100 text-base text-center mt-8'>Já tem o ingresso?</Link>
+                <Link href="/" className=' text-gray-50 text-base text-center mt-8'>Já tem o ingresso?</Link>
 
             </View>
 

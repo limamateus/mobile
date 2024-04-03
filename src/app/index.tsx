@@ -7,7 +7,7 @@ import { Link } from 'expo-router'
 
 export default function Home(){
     return(
-        <View className="flex-1 bg-green-700 items-center justify-center p-8">
+        <View className="flex-1  bg-green-900 items-center justify-center p-8">
              <StatusBar barStyle="light-content"/>
            <Image
             source={require('@/assets/logo.png')}  // Caminho da imagem

@@ -1,7 +1,7 @@
 import { Slot } from 'expo-router'
 // Libs
 import '../styles/global.css'
-import { StatusBar } from 'expo-status-bar'
+
 
 // Componentes
 import { Loading } from '@/components/loading'
@@ -14,16 +14,16 @@ import {
 
 export default function Layout() {
 
-   const [fontsLoaded]= useFonts({
-     Roboto_700Bold,
-    Roboto_500Medium,
-    Roboto_400Regular
+    const [fontsLoaded] = useFonts({
+        Roboto_700Bold,
+        Roboto_500Medium,
+        Roboto_400Regular
     })
 
-    if(!fontsLoaded){
-<Loading/>
+    if (!fontsLoaded) {
+        <Loading />
     }
-    
 
-    return <Slot/>
+
+    return <Slot />
 }
