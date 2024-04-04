@@ -1,11 +1,23 @@
 import { Input } from '@/components/input'
-import { Image, View, StatusBar } from 'react-native'
+import { Image, View, StatusBar, Alert } from 'react-native'
 import { FontAwesome6, MaterialIcons } from '@expo/vector-icons'
 import { colors } from '@/styles/colors'
 import { Button } from '@/components/button'
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
+import { useState } from 'react'
 
 export default function Home() {
+    const [nome,setNome] = useState("")
+    const [email,setEmail] = useState("")
+    function handleRegister(){
+        if(!nome.trim() || !email.trim()){
+            return Alert.alert("Inscrição", "Preencha todos os campos!")
+        }
+
+
+        router.push("/ticket")
+
+    }
     return (
         <View className="flex-1 bg-green-700 items-center justify-center p-8">
             <StatusBar barStyle="light-content" />
@@ -20,16 +32,19 @@ export default function Home() {
                     <FontAwesome6 name="user-circle" size={20} color={colors.green[200]} />
                     <Input.Field
                         placeholder='Nome Completo'
+                        onChangeText={setNome}
                     />
                 </Input>
                 <Input>
                     <MaterialIcons name="alternate-email" size={20} color={colors.green[200]} />
                     <Input.Field
                         keyboardType='email-address'
-                        placeholder='Nome Completo'
+                        placeholder='Email'
+                        onChangeText={setEmail}
                     />
                 </Input>
                 <Button
+                onPress={handleRegister}
                     title='Acessar credencial'
                     isLoading={false}
                 />
