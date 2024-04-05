@@ -11,8 +11,8 @@ import { QRCode } from "@/components/qrcode";
 
 export default function Ticket() {
 
-    const [image,setImage] = useState('')
-    const [expandQRCode,setExpandQRCode] = useState(false)
+    const [image,setImage] = useState('') // useState que tem a responsabilidade de mudar e pegar a imagem do usuario
+    const [expandQRCode,setExpandQRCode] = useState(false) // useState que tem responsabilidade de abrir e fechar o modal
 
     async function handleSelectImage( ){ // Função para buscar uma imagem
         try { // Tratamento de Esseção 
@@ -23,13 +23,13 @@ export default function Ticket() {
 
             })
 
-            if(result.assets){
-               setImage(result.assets[0].uri)
+            if(result.assets){ // Verifico se tem informação 
+               setImage(result.assets[0].uri) // pega o caminho da imagem.
             }
             
-        } catch (error) {
+        } catch (error) { // Caso de algum erro
             console.log(error) // Caso de algum erro eu mostro no console
-            Alert.alert("Foto", "Não foi possivel selecionar a imagem.")
+            Alert.alert("Foto", "Não foi possivel selecionar a imagem.") // Mostro uma alerta informando 
 
         }
 
@@ -44,20 +44,21 @@ export default function Ticket() {
 
 
             <Header title="Minha  Credencial" />
-            <ScrollView className=" -mt-28 -z-10"
+
+            <ScrollView className=" -mt-28 -z-10" 
                 contentContainerClassName="px-16 pb-8"
                 showsVerticalScrollIndicator={false}>
-                <Credential
+                <Credential  
                 onChangeAvatar={handleSelectImage}
                 onShowQRCode={() => setExpandQRCode(true)}
                 image={image}
-                />
+                /> 
 
                 <FontAwesome name="angle-double-down"
                     color={colors.gray[300]}
                     size={24}
                     className=" self-center my-6"
-                />
+                /> 
 
                 <Text className=" text-white font-bold text-2x1 mt-4">
                     Compartilhar credencial
@@ -70,17 +71,17 @@ export default function Ticket() {
 
                 <TouchableOpacity
                     activeOpacity={0.7}
-                >
+                > 
                     <View className=" mt-10">
-                        <Text className="text-base text-white font-bold text-center" > Remover Ingresso</Text>
+                        <Text className="text-base text-white font-bold text-center"> Remover Ingresso </Text>
 
                     </View>
                 </TouchableOpacity>
             </ScrollView>
 
+          
 
-
-            <Modal visible={expandQRCode} statusBarTranslucent={true} animationType="slide">
+            <Modal visible={expandQRCode} statusBarTranslucent={true} animationType="slide"> 
                 <View className="flex-1 bg-green-700 items-center justify-center">
                     <QRCode value={"testes"} size={300}/>
                     

@@ -5,17 +5,55 @@ import { colors } from '@/styles/colors'
 import { Button } from '@/components/button'
 import { Link, router } from 'expo-router'
 import { useState } from 'react'
-
+import { api } from '@/server/api'
+import axios from 'axios'
 export default function Home() {
-    const [nome,setNome] = useState("")
-    const [email,setEmail] = useState("")
-    function handleRegister(){
-        if(!nome.trim() || !email.trim()){
-            return Alert.alert("Inscrição", "Preencha todos os campos!")
+    const [nome, setNome] = useState("")
+    const [email, setEmail] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
+
+    const EVENT_ID = "2b9b126e-ea39-4580-90ca-ebb07cec2384";
+
+    async function handleRegister() {
+        try {
+            if (!nome.trim() || !email.trim()) {
+                return Alert.alert("Inscrição", "Preencha todos os campos!")
+            }
+            
+            const registerResponse = await api.post(`/api/attendees/${EVENT_ID}/register`, {
+                name: nome,
+                email: email
+            })
+
+            console.log(registerResponse.data);
+            if (registerResponse.data.id) {
+
+                Alert.alert("Inscrição", "Inscrição realizada com Sucesso!", [
+                    {
+                        text: "OK", onPress: () => {
+                            router.push("/ticket")
+                        },
+                    }
+                ])
+            }
+
+
+        } catch (error) {
+            console.log(error)
+
+            if(axios.isAxiosError(error))
+            {   console.log(error.response?.data)
+                if(String(error.response?.data.message).includes("You can not register twice on the same event.")){
+                    return Alert.alert("Alerta", "Essa credencial já foi gerada!")
+                }
+            }
+
+           
+            Alert.alert("Erro", "Lamentamos pelo incomado, mas não conseguimos realizar a inscrição.")
+        }finally{
+            setIsLoading(false)
         }
 
-
-        router.push("/ticket")
 
     }
     return (
@@ -44,9 +82,9 @@ export default function Home() {
                     />
                 </Input>
                 <Button
-                onPress={handleRegister}
+                    onPress={handleRegister}
                     title='Acessar credencial'
-                    isLoading={false}
+                    isLoading={isLoading}
                 />
                 <Link href="/" className=' text-gray-50 text-base text-center mt-8'>Já tem o ingresso?</Link>
 

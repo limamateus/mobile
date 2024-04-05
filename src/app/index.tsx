@@ -5,14 +5,38 @@ import { colors } from '@/styles/colors'
 import { Button } from '@/components/button'
 import { Link } from 'expo-router'
 import { useState } from 'react'
+import {useBadgeStore} from "@/store/badge-store"
+import { api } from '@/server/api'
 
 export default function Home(){
     const [ingresso,setIngresso] = useState("")
+    const [isLoading,setLoading] = useState(false)
 
-    function handleAcessCredential(){
-        if(!ingresso.trim()){
-            return Alert.alert("Ingresso", "Informe o código do ingresso!")
+     const badgeStore = useBadgeStore();
+
+  async  function handleAcessCredential(){
+     
+        try {
+           
+            if(!ingresso.trim()){
+                return Alert.alert("Ingresso", "Informe o código do ingresso!")
+            }
+            setLoading(true)
+
+            const data = await (await api.get(`api/checkincontroller/3DB01B35-1550-419A-B1F0-46337A7FAC54`))
+            console.log(data.data)
+            badgeStore.save(data.data)  
+
+            console.log("Dados" , badgeStore.data)
+    
+        } catch (error) {     
+
+            setLoading(false)
+            Alert.alert("Igresso", "Ingresso não encontrado!")
+        }finally{
+            setLoading(false)
         }
+
     }
 
     return(
@@ -35,7 +59,7 @@ export default function Home(){
                 <Button 
                 onPress={handleAcessCredential}
                 title='Acessar credencial' 
-                isLoading={false}                 
+                isLoading={isLoading}                 
                 />
                 <Link href="/register" className=' text-gray-100 text-base text-center mt-8'>Ainda não possui ingresso?</Link>
                                
