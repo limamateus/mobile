@@ -7,10 +7,13 @@ import { Link, router } from 'expo-router'
 import { useState } from 'react'
 import { api } from '@/server/api'
 import axios from 'axios'
+import { useBadgeStore } from '@/store/badge-store'
 export default function Home() {
     const [nome, setNome] = useState("")
     const [email, setEmail] = useState("")
     const [isLoading, setIsLoading] = useState(false)
+
+    const badgeStore = useBadgeStore();
 
     const EVENT_ID = "2b9b126e-ea39-4580-90ca-ebb07cec2384";
 
@@ -26,8 +29,8 @@ export default function Home() {
             })
 
             console.log(registerResponse.data);
-            if (registerResponse.data.id) {
-
+            if (registerResponse.data.id) { 
+                    
                 Alert.alert("Inscrição", "Inscrição realizada com Sucesso!", [
                     {
                         text: "OK", onPress: () => {
