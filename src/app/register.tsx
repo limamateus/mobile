@@ -8,37 +8,62 @@ import { useState } from 'react'
 import { api } from '@/server/api'
 import axios from 'axios'
 import { useBadgeStore } from '@/store/badge-store'
+
+
 export default function Home() {
     const [nome, setNome] = useState("")
     const [email, setEmail] = useState("")
     const [isLoading, setIsLoading] = useState(false)
-
+   
     const badgeStore = useBadgeStore();
 
-    const EVENT_ID = "2b9b126e-ea39-4580-90ca-ebb07cec2384";
-
+    const EVENT_ID = "17df9279-1cf0-4290-b92b-66549b1f7b92"; 
+       
+    
     async function handleRegister() {
-        try {
-            if (!nome.trim() || !email.trim()) {
-                return Alert.alert("Inscrição", "Preencha todos os campos!")
+        
+        try { //  1 - Aqui estou usando para tentar realizar um registro
+            if (!nome.trim() || !email.trim()) { // 2 - Mas antes de realizar as requisições preciso validar o formulario se esta vazio
+                return Alert.alert("Inscrição", "Preencha todos os campos!") // 3 - Caso não preecheu retorno um Alertar dizendo para prrencher todos os campos
             }
-            
+            // 4 - Vou registar o usuario num evento que por enquanto esta fixo
             const registerResponse = await api.post(`/api/attendees/${EVENT_ID}/register`, {
                 name: nome,
                 email: email
-            })
-
+            })          
+            badgeStore.save(registerResponse.data)
+            badgeStore.upDateEvent(registerResponse.data.event.title,registerResponse.data.event.details)
             console.log(registerResponse.data);
-            if (registerResponse.data.id) { 
-                    
-                Alert.alert("Inscrição", "Inscrição realizada com Sucesso!", [
-                    {
-                        text: "OK", onPress: () => {
-                            router.push("/ticket")
-                        },
+                try {
+                    if (registerResponse.data.id) { // 5 -  Verifico se tem um id no retorno da requisição 
+              
+                        // Por enquanto eu vou fazer o checkin no momento que ele registra no evento                    
+                        const response  = await api.post(`/api/checkin/${registerResponse.data.id}`)  // 7 - realizo o checkin
+                        
+                        if(response.data.code){ //8 -  Verifico se tem um code 
+                         
+                           console.log(response.data.code)
+                           badgeStore.upDateCode(response.data.code)   
+                            Alert.alert("Inscrição", "Inscrição realizada com Sucesso!", [
+                                {
+                                    text: "OK", onPress: () => { // 9 -  Vou para tela de Ticket
+                                        router.push("/ticket")
+                                    },
+                                }
+                            ])
+                         }
+                        
                     }
-                ])
-            }
+                    
+                } catch (error) {
+                    if(axios.isAxiosError(error))
+                    {   console.log(error.response?.data)
+                        if(String(error.response?.data.message).includes("There is no room this event.")){
+                            return Alert.alert("Alerta", "Evento Esgotado")
+                        }
+                    }
+                }
+           
 
 
         } catch (error) {

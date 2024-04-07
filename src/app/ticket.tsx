@@ -3,13 +3,14 @@ import { Credential } from "@/components/credential";
 import { Header } from "@/components/header";
 import { colors } from "@/styles/colors";
 import { FontAwesome } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Modal, ScrollView, Share, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import * as ImagePicker from 'expo-image-picker'
 import { QRCode } from "@/components/qrcode";
 import  {useBadgeStore} from "@/store/badge-store"
 import { Redirect } from "expo-router";
 import { MotiView } from "moti";
+import { api } from "@/server/api";
 
 export default function Ticket() {
 
@@ -17,6 +18,10 @@ export default function Ticket() {
     const [expandQRCode,setExpandQRCode] = useState(false) // useState que tem responsabilidade de abrir e fechar o modal
 
     const badgeStore = useBadgeStore();
+
+    
+  
+   
     async function handleShare() {
         try {
             if(badgeStore.data?.id){
@@ -94,14 +99,15 @@ export default function Ticket() {
                     className=" self-center my-6"
                 /> 
                 </MotiView>
-               
+                
+                <Text className=" text-white font-regular text-base mt-1 mb-4">
+                   {badgeStore.data.details}
+                </Text>
 
-                <Text className=" text-white font-bold text-2x1 mt-4">
+                <Text className=" text-white font-bold text-2x1 mt-4 mb-6 text-center">
                     Compartilhar credencial
                 </Text>
-                <Text className=" text-white font-regular text-base mt-1 mb-6">
-                    Mostre ao mundo que vai participar do maior evendo do Brasil
-                </Text>
+                
                 <Button title="Compartilar"
                 onPress={handleShare}
                 />

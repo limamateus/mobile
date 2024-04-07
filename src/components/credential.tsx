@@ -16,7 +16,7 @@ type Props = {
 
 
 export function Credential({data, onChangeAvatar,onShowQRCode }: Props) {
-
+    
     const {height} = useWindowDimensions()
     return (
         <MotiView 
@@ -58,7 +58,7 @@ export function Credential({data, onChangeAvatar,onShowQRCode }: Props) {
                 >
                     <View className=" w-full flex-row items-center justify-between">
                         <Text className="text-zinc-50 text-sm font-bold"> {data.title}</Text>
-                        <Text className="text-zinc-50 text-sm font-bold">#123</Text>
+                        <Text className="text-zinc-50 text-sm font-bold">{data.code}</Text>
                     </View>
 
                     <View className="w-40 h-40 bg-black rounded-full" />

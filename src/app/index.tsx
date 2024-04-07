@@ -23,9 +23,28 @@ export default function Home() {
             }
             setLoading(true)
 
-            const data = await (await api.get(`api/attendees/attendee/${ingresso}`))
-            console.log(data.data)
-            badgeStore.save(data.data)
+         
+
+            const response = await (await api.get(`api/checkin?code=${ingresso}`))
+            console.log(response.data)
+           
+            if(response.data.attendee_Id){
+              
+                try {
+                     
+                    const respota = await api.get(`api/attendees/attendee/${response.data.attendee_Id}`)   
+                    console.log(respota.data)                                                
+                    badgeStore.save(respota.data) 
+                    badgeStore.upDateCode(ingresso)  
+                    badgeStore.upDateEvent(respota.data.event.title, respota.data.event.details)
+
+                } catch (error) {
+                    console.log(error)
+                    Alert.alert("Ingresso", "Não foi possivel encontrar seu registro no evento.")
+
+                }
+               
+            }
 
             console.log("Dados", badgeStore.data)
 

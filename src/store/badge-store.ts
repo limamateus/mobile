@@ -9,9 +9,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
     email: string
     title: string
     details:string
-    checkInUrl: string
+    eventId: string
+    attendee_Id: string
+    code: string
     image?:string
 }
+
 
 export type CheckinProps ={
     attendee_Id : string,
@@ -24,6 +27,8 @@ type StateProps = {
     save : ( data : BadgeProps) => void
     remove: () => void
     updataAvatar:(uri:string) => void
+    upDateCode:(codeCheckIn:string) => void
+    upDateEvent:(titleEvent:string, detailsEvent:string) => void
 }
 
 
@@ -35,6 +40,12 @@ export const useBadgeStore = create(
     remove: () => set(() => ({data:null})),
     updataAvatar: (uri:string) => set((state)=> ({
         data: state.data? {...state.data, image: uri} : state.data,
+    })),
+    upDateCode:(codeCheckIn:string) => set((state) =>({
+        data: state.data? {...state.data, code: codeCheckIn} : state.data,
+    })),
+    upDateEvent:(titleEvent:string, detailsEvent:string) =>set((state) => ({
+        data: state.data? {...state.data, title: titleEvent, details: detailsEvent} : state.data,
     }))
 }),{
     name: "nlw-unite:badge",
